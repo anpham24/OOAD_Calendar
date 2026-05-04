@@ -1,6 +1,6 @@
 ﻿namespace OOAD_Calendar.View
 {
-	partial class Register
+	partial class RegisterForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.btnRegister = new System.Windows.Forms.Button();
-			this.txtRegister = new System.Windows.Forms.TextBox();
+			this.txtUsername = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
@@ -41,13 +41,14 @@
 			this.btnRegister.TabIndex = 5;
 			this.btnRegister.Text = "Đăng ký";
 			this.btnRegister.UseVisualStyleBackColor = true;
+			this.btnRegister.Click += new System.EventHandler(this.btnRegister_Click);
 			// 
-			// txtRegister
+			// txtUsername
 			// 
-			this.txtRegister.Location = new System.Drawing.Point(380, 179);
-			this.txtRegister.Name = "txtRegister";
-			this.txtRegister.Size = new System.Drawing.Size(168, 22);
-			this.txtRegister.TabIndex = 4;
+			this.txtUsername.Location = new System.Drawing.Point(380, 179);
+			this.txtUsername.Name = "txtUsername";
+			this.txtUsername.Size = new System.Drawing.Size(168, 22);
+			this.txtUsername.TabIndex = 4;
 			// 
 			// label1
 			// 
@@ -58,15 +59,15 @@
 			this.label1.TabIndex = 3;
 			this.label1.Text = "Tên đăng nhập";
 			// 
-			// Register
+			// RegisterForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 450);
 			this.Controls.Add(this.btnRegister);
-			this.Controls.Add(this.txtRegister);
+			this.Controls.Add(this.txtUsername);
 			this.Controls.Add(this.label1);
-			this.Name = "Register";
+			this.Name = "RegisterForm";
 			this.Text = "Register";
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -76,7 +77,7 @@
 		#endregion
 
 		private System.Windows.Forms.Button btnRegister;
-		private System.Windows.Forms.TextBox txtRegister;
+		private System.Windows.Forms.TextBox txtUsername;
 		private System.Windows.Forms.Label label1;
 	}
 }

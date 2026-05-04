@@ -32,7 +32,6 @@
 			this.dtpStart = new System.Windows.Forms.DateTimePicker();
 			this.label7 = new System.Windows.Forms.Label();
 			this.btnAddGuest = new System.Windows.Forms.Button();
-			this.txtGuestName = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.label5 = new System.Windows.Forms.Label();
@@ -46,6 +45,7 @@
 			this.txtName = new System.Windows.Forms.TextBox();
 			this.lbParticipants = new System.Windows.Forms.ListBox();
 			this.label8 = new System.Windows.Forms.Label();
+			this.cboParticipants = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
 			// dtpEnd
@@ -81,20 +81,13 @@
 			// btnAddGuest
 			// 
 			this.btnAddGuest.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnAddGuest.Location = new System.Drawing.Point(591, 314);
+			this.btnAddGuest.Location = new System.Drawing.Point(519, 315);
 			this.btnAddGuest.Name = "btnAddGuest";
-			this.btnAddGuest.Size = new System.Drawing.Size(152, 30);
+			this.btnAddGuest.Size = new System.Drawing.Size(95, 30);
 			this.btnAddGuest.TabIndex = 32;
-			this.btnAddGuest.Text = "Thêm thành viên";
+			this.btnAddGuest.Text = "Thêm";
 			this.btnAddGuest.UseVisualStyleBackColor = true;
 			this.btnAddGuest.Click += new System.EventHandler(this.btnAddGuest_Click);
-			// 
-			// txtGuestName
-			// 
-			this.txtGuestName.Location = new System.Drawing.Point(225, 319);
-			this.txtGuestName.Name = "txtGuestName";
-			this.txtGuestName.Size = new System.Drawing.Size(335, 22);
-			this.txtGuestName.TabIndex = 31;
 			// 
 			// label6
 			// 
@@ -185,6 +178,7 @@
 			// 
 			this.cboReminder.FormattingEnabled = true;
 			this.cboReminder.Items.AddRange(new object[] {
+            "Không nhắc nhở",
             "15 phút",
             "30 phút",
             "45 phút",
@@ -224,7 +218,6 @@
 			this.lbParticipants.Name = "lbParticipants";
 			this.lbParticipants.Size = new System.Drawing.Size(439, 164);
 			this.lbParticipants.TabIndex = 24;
-			this.lbParticipants.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbParticipants_KeyDown);
 			// 
 			// label8
 			// 
@@ -232,20 +225,28 @@
 			this.label8.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label8.Location = new System.Drawing.Point(95, 320);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(113, 19);
+			this.label8.Size = new System.Drawing.Size(149, 19);
 			this.label8.TabIndex = 30;
-			this.label8.Text = "Người tham gia";
+			this.label8.Text = "Chọn người tham gia";
+			// 
+			// cboParticipants
+			// 
+			this.cboParticipants.FormattingEnabled = true;
+			this.cboParticipants.Location = new System.Drawing.Point(265, 320);
+			this.cboParticipants.Name = "cboParticipants";
+			this.cboParticipants.Size = new System.Drawing.Size(234, 24);
+			this.cboParticipants.TabIndex = 36;
 			// 
 			// AddGroupMeetingForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(842, 647);
+			this.Controls.Add(this.cboParticipants);
 			this.Controls.Add(this.dtpEnd);
 			this.Controls.Add(this.dtpStart);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.btnAddGuest);
-			this.Controls.Add(this.txtGuestName);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.btnCancel);
@@ -261,6 +262,7 @@
 			this.Controls.Add(this.txtName);
 			this.Name = "AddGroupMeetingForm";
 			this.Text = "AddGroupMeetingForm";
+			this.Load += new System.EventHandler(this.AddGroupMeetingForm_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -272,7 +274,6 @@
         private System.Windows.Forms.DateTimePicker dtpStart;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnAddGuest;
-        private System.Windows.Forms.TextBox txtGuestName;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label label5;
@@ -286,5 +287,6 @@
         private System.Windows.Forms.TextBox txtName;
 		private System.Windows.Forms.ListBox lbParticipants;
 		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.ComboBox cboParticipants;
 	}
 }

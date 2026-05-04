@@ -3,12 +3,12 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class Initial : DbMigration
     {
         public override void Up()
         {
             CreateTable(
-                "dbo.Appointments",
+                "dbo.Appointment",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
@@ -33,29 +33,38 @@
                 .Index(t => t.UserId);
             
             CreateTable(
-                "dbo.Users",
-                c => new
-                    {
-                        UserId = c.Int(nullable: false, identity: true),
-                        UserName = c.String(nullable: false, maxLength: 30),
-                        GroupMeeting_Id = c.Int(),
-                    })
-                .PrimaryKey(t => t.UserId)
-                .ForeignKey("dbo.GroupMeeting", t => t.GroupMeeting_Id)
-                .Index(t => t.GroupMeeting_Id);
-            
-            CreateTable(
                 "dbo.Reminders",
                 c => new
                     {
                         ReminderId = c.Int(nullable: false, identity: true),
                         ReminderTime = c.DateTime(nullable: false),
-                        Message = c.String(),
-                        AppoinmentId = c.Int(nullable: false),
+                        AppointmentId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.ReminderId)
-                .ForeignKey("dbo.Appointments", t => t.AppoinmentId, cascadeDelete: true)
-                .Index(t => t.AppoinmentId);
+                .ForeignKey("dbo.Appointment", t => t.AppointmentId, cascadeDelete: true)
+                .Index(t => t.AppointmentId);
+            
+            CreateTable(
+                "dbo.Users",
+                c => new
+                    {
+                        UserId = c.Int(nullable: false, identity: true),
+                        UserName = c.String(nullable: false, maxLength: 30),
+                    })
+                .PrimaryKey(t => t.UserId);
+            
+            CreateTable(
+                "dbo.GroupMeetingParticipants",
+                c => new
+                    {
+                        GroupMeetingId = c.Int(nullable: false),
+                        CalendarId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.GroupMeetingId, t.CalendarId })
+                .ForeignKey("dbo.GroupMeeting", t => t.GroupMeetingId, cascadeDelete: true)
+                .ForeignKey("dbo.Calendars", t => t.CalendarId, cascadeDelete: true)
+                .Index(t => t.GroupMeetingId)
+                .Index(t => t.CalendarId);
             
             CreateTable(
                 "dbo.GroupMeeting",
@@ -64,28 +73,31 @@
                         Id = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Appointments", t => t.Id)
+                .ForeignKey("dbo.Appointment", t => t.Id)
                 .Index(t => t.Id);
             
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.GroupMeeting", "Id", "dbo.Appointments");
-            DropForeignKey("dbo.Users", "GroupMeeting_Id", "dbo.GroupMeeting");
-            DropForeignKey("dbo.Reminders", "AppoinmentId", "dbo.Appointments");
-            DropForeignKey("dbo.Appointments", "CalendarId", "dbo.Calendars");
+            DropForeignKey("dbo.GroupMeeting", "Id", "dbo.Appointment");
+            DropForeignKey("dbo.Appointment", "CalendarId", "dbo.Calendars");
             DropForeignKey("dbo.Calendars", "UserId", "dbo.Users");
+            DropForeignKey("dbo.Reminders", "AppointmentId", "dbo.Appointment");
+            DropForeignKey("dbo.GroupMeetingParticipants", "CalendarId", "dbo.Calendars");
+            DropForeignKey("dbo.GroupMeetingParticipants", "GroupMeetingId", "dbo.GroupMeeting");
             DropIndex("dbo.GroupMeeting", new[] { "Id" });
-            DropIndex("dbo.Reminders", new[] { "AppoinmentId" });
-            DropIndex("dbo.Users", new[] { "GroupMeeting_Id" });
+            DropIndex("dbo.GroupMeetingParticipants", new[] { "CalendarId" });
+            DropIndex("dbo.GroupMeetingParticipants", new[] { "GroupMeetingId" });
+            DropIndex("dbo.Reminders", new[] { "AppointmentId" });
             DropIndex("dbo.Calendars", new[] { "UserId" });
-            DropIndex("dbo.Appointments", new[] { "CalendarId" });
+            DropIndex("dbo.Appointment", new[] { "CalendarId" });
             DropTable("dbo.GroupMeeting");
-            DropTable("dbo.Reminders");
+            DropTable("dbo.GroupMeetingParticipants");
             DropTable("dbo.Users");
+            DropTable("dbo.Reminders");
             DropTable("dbo.Calendars");
-            DropTable("dbo.Appointments");
+            DropTable("dbo.Appointment");
         }
     }
 }

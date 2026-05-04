@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace OOAD_Calendar.DTO
 {
-    public class User
-    {
-        [Key]
-        public int UserId { get; set; }
-        [Required]
-        [StringLength(30)]
-        public string UserName { get; set; }
-        public virtual Calendar Calendar { get; set; }
-    }
+	public class User
+	{
+		[Key]
+		public int UserId { get; set; }
+		[Required]
+		[StringLength(30)]
+		public string UserName { get; set; }
+		public virtual Calendar Calendar { get; set; }
+	}
 }

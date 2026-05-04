@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace OOAD_Calendar.DTO
 {
-    [Table("GroupMeeting")]
-    public class GroupMeeting : Appointment
-    {
-        public virtual ICollection<User> Participants { get; set; }
-    }
+	[Table("GroupMeeting")]
+	public class GroupMeeting : Appointment
+	{
+		public virtual ICollection<Calendar> Calendars { get; set; }
+		public GroupMeeting()
+		{
+			Calendars = new HashSet<Calendar>();
+		}
+
+	}
 }

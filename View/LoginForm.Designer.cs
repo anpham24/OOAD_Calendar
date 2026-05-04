@@ -1,6 +1,6 @@
 ﻿namespace OOAD_Calendar.View
 {
-	partial class Login
+	partial class LoginForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.label1 = new System.Windows.Forms.Label();
-			this.txtLogin = new System.Windows.Forms.TextBox();
+			this.txtUsername = new System.Windows.Forms.TextBox();
 			this.btnLogin = new System.Windows.Forms.Button();
 			this.btnNewAccount = new System.Windows.Forms.Button();
 			this.SuspendLayout();
@@ -43,12 +43,12 @@
 			this.label1.TabIndex = 0;
 			this.label1.Text = "Tên đăng nhập";
 			// 
-			// txtLogin
+			// txtUsername
 			// 
-			this.txtLogin.Location = new System.Drawing.Point(377, 189);
-			this.txtLogin.Name = "txtLogin";
-			this.txtLogin.Size = new System.Drawing.Size(168, 22);
-			this.txtLogin.TabIndex = 1;
+			this.txtUsername.Location = new System.Drawing.Point(377, 189);
+			this.txtUsername.Name = "txtUsername";
+			this.txtUsername.Size = new System.Drawing.Size(168, 22);
+			this.txtUsername.TabIndex = 1;
 			// 
 			// btnLogin
 			// 
@@ -58,6 +58,7 @@
 			this.btnLogin.TabIndex = 2;
 			this.btnLogin.Text = "Đăng nhập";
 			this.btnLogin.UseVisualStyleBackColor = true;
+			this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
 			// 
 			// btnNewAccount
 			// 
@@ -67,17 +68,18 @@
 			this.btnNewAccount.TabIndex = 2;
 			this.btnNewAccount.Text = "Tạo tài khoản";
 			this.btnNewAccount.UseVisualStyleBackColor = true;
+			this.btnNewAccount.Click += new System.EventHandler(this.btnNewAccount_Click);
 			// 
-			// Login
+			// LoginForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 450);
 			this.Controls.Add(this.btnNewAccount);
 			this.Controls.Add(this.btnLogin);
-			this.Controls.Add(this.txtLogin);
+			this.Controls.Add(this.txtUsername);
 			this.Controls.Add(this.label1);
-			this.Name = "Login";
+			this.Name = "LoginForm";
 			this.Text = "Login";
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -87,7 +89,7 @@
 		#endregion
 
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox txtLogin;
+		private System.Windows.Forms.TextBox txtUsername;
 		private System.Windows.Forms.Button btnLogin;
 		private System.Windows.Forms.Button btnNewAccount;
 	}

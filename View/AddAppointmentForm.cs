@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OOAD_Calendar.BLL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,136 +11,125 @@ using System.Windows.Forms;
 
 namespace OOAD_Calendar.View
 {
-    public partial class AddAppointmentForm : Form
-    {
-        public AddAppointmentForm(DateTime dateFormMain)
-        {
-            InitializeComponent();
+	public partial class AddAppointmentForm : Form
+	{
+		private int currentUserId;
+		private EventBLL eventBll = new EventBLL();
 
-            dtpStart.Value = dateFormMain;
-            dtpEnd.Value = dateFormMain.AddHours(1);
-        }
+		public AddAppointmentForm(int userId, DateTime selectedDate)
+		{
+			InitializeComponent();
+			this.currentUserId = userId;
 
-        public AddAppointmentForm()
-        {
-            InitializeComponent();
-        }
+			dtpStart.Value = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, 8, 0, 0);
+			dtpEnd.Value = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, 9, 0, 0);
 
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            if (!CheckInputValidation()) return;
-            if (!HandleScheduleConflict()) return;
-            if (!HandleGroupMeetingMatching()) return;
-            FinalizeSave();
-        }
+			cboReminder.SelectedIndex = 0;
+		}
+		private void btnCancel_Click(object sender, EventArgs e)
+		{
+			this.DialogResult = DialogResult.Cancel;
+			this.Close();
+		}
 
-        private bool CheckInputValidation()
-        {
-            if (string.IsNullOrWhiteSpace(txtName.Text.Trim()))
-            {
-                MessageBox.Show("Tên lịch hẹn không được để trống!",
-                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
+		private void btnSave_Click(object sender, EventArgs e)
+		{
+			string name = txtName.Text.Trim();
+			string location = txtLocation.Text.Trim();
+			DateTime startTime = dtpStart.Value;
+			DateTime endTime = dtpEnd.Value;
 
-            if (dtpEnd.Value <= dtpStart.Value)
-            {
-                MessageBox.Show("Giờ kết thúc phải sau giờ bắt đầu!",
-                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
+			if (string.IsNullOrEmpty(name))
+			{
+				MessageBox.Show("Tên sự kiện không được để trống!", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				txtName.Focus();
+				return;
+			}
 
-        private bool HandleScheduleConflict()
-        {
-            bool isConflict = false;
-            // sau này bool isConflict = CheckConflictInDatabase();
+			if (!eventBll.ValidateTime(startTime, endTime))
+			{
+				MessageBox.Show("Thời gian kết thúc phải lớn hơn thời gian bắt đầu!", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				dtpEnd.Focus();
+				return;
+			}
 
-            if (isConflict)
-            {
-                var result = MessageBox.Show("Khung giờ này đã có lịch hẹn khác. Bạn có muốn GHI ĐÈ (Xóa lịch cũ) không?",
-                            "Xung đột lịch", MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Warning);
+			TimeSpan duration = endTime - startTime;
+			var matchingMeeting = eventBll.FindMatchingGroupMeeting(name, duration, startTime, endTime);
 
-                if (result == DialogResult.Yes)
-                {
-                    // 1. Sau này ráp DB, chỗ này gọi hàm Xóa lịch cũ:
-                    // db.Appointments.Remove(lịch_bị_trùng);
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+			if (matchingMeeting != null)
+			{
+				DialogResult joinResult = MessageBox.Show(
+					"Có một cuộc họp nhóm cùng tên và thời gian đang diễn ra. Bạn có muốn tham gia vào cuộc họp này thay vì tạo sự kiện mới không?",
+					"Phát hiện họp nhóm",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Question);
 
-        private bool HandleGroupMeetingMatching()
-        {
-            bool isMatchGroup = false; // = CheckGroupInDatabase();
-            if (isMatchGroup)
-            {
-                DialogResult result = MessageBox.Show("Lịch cá nhân này trùng với một cuộc họp nhóm. Bạn có muốn gia nhập nhóm đó luôn không?",
-                                "Tham gia nhóm", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+				if (joinResult == DialogResult.Yes)
+				{
+					eventBll.JoinGroupMeeting(currentUserId, matchingMeeting.Id);
+					MessageBox.Show("Đã tham gia nhóm thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                switch (result)
-                {
-                    case DialogResult.Cancel: return false;
+					this.DialogResult = DialogResult.OK;
+					this.Close();
+					return;
+				}
+			}
 
-                    case DialogResult.Yes:
-                        JoinGroupMeeting();
-                        this.DialogResult = DialogResult.OK;
-                        return false;
 
-                    case DialogResult.No: return true;
+			bool isOverlap = eventBll.HasOverlappingEvents(currentUserId, startTime, endTime);
 
-                    default: return true;
-                }
-            }
-            return true;
-        }
+			if (isOverlap)
+			{
+				DialogResult overlapResult = MessageBox.Show(
+					"Khoảng thời gian này đã có sự kiện khác. Bạn có muốn thay thế (Xóa sự kiện cũ, lưu sự kiện này) không?\n\n- Chọn 'Yes' để thay thế.\n- Chọn 'No' để chọn lại giờ khác.",
+					"Trùng lịch trình",
+					MessageBoxButtons.YesNo,
+					MessageBoxIcon.Warning);
 
-        private void JoinGroupMeeting()
-        {
-            // 1. Logic Database: Thêm User hiện tại vào ParticipantList của Group đó
-            // group.addParticipant(currentUser);  db.SaveChanges();
+				if (overlapResult == DialogResult.No)
+				{
+					dtpStart.Focus();
+					return;
+				}
+				else
+				{
+					eventBll.DeleteOverlappingEvents(currentUserId, startTime, endTime);
+				}
+			}
 
-            MessageBox.Show("Bạn đã được thêm vào cuộc họp nhóm thành công!", "Thông báo");
-        }
+			try
+			{
+				Appointment newAppt = new Appointment
+				{
+					Name = name,
+					StartTime = startTime,
+					EndTime = endTime,
+					Location = location,
+					CalendarId = currentUserId
+				};
 
-        private void FinalizeSave()
-        {
-            try
-            {
-                // Gọi code lưu của bạn làm Database ở đây
-                // db.SaveChanges(); 
+				List<DateTime> reminders = new List<DateTime>();
+				if (cboReminder.SelectedItem != null && cboReminder.SelectedItem.ToString() != "Không nhắc nhở")
+				{
+					string selectedReminder = cboReminder.SelectedItem.ToString();
+					string numberString = selectedReminder.Split(' ')[0];
 
-                MessageBox.Show("Đã thêm lịch hẹn thành công!", "Thành công",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.DialogResult = DialogResult.OK; // Trả kết quả về cho MainForm biết để Load lại DGV
-                this.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Có lỗi khi lưu: " + ex.Message, "Lỗi hệ thống",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+					if (int.TryParse(numberString, out int minutesToSubtract))
+					{
+						reminders.Add(startTime.AddMinutes(-minutesToSubtract));
+					}
+				}
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(txtName.Text))
-            {
-                DialogResult result = MessageBox.Show("Những thay đổi của bạn chưa được lưu. Bạn có chắc chắn muốn thoát không?",
-                    "Xác nhận hủy", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+				eventBll.CreateAppointment(newAppt, reminders);
 
-                if (result == DialogResult.No) return;
-            }
-
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
-        }
-    }
+				MessageBox.Show("Tạo lịch hẹn thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				this.DialogResult = DialogResult.OK;
+				this.Close();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Có lỗi xảy ra khi lưu: " + ex.Message, "Lỗi hệ thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
+	}
 }

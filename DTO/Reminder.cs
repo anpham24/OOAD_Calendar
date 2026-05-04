@@ -8,17 +8,16 @@ using System.Threading.Tasks;
 
 namespace OOAD_Calendar.DTO
 {
-    public class Reminder
-    {
-        [Key]
-        public int ReminderId { get; set; }
-        [Required]
-        public DateTime ReminderTime { get; set; }
-        public string Message  { get; set; }
+	public class Reminder
+	{
+		[Key]
+		public int ReminderId { get; set; }
+		[Required]
+		public DateTime ReminderTime { get; set; }
 
-        [ForeignKey("Appoinment")]
-        public int AppoinmentId { get; set; }
-        public virtual Appointment Appoinment { get; set; }
+		[ForeignKey("Appointment")]
+		public int AppointmentId { get; set; }
+		public virtual Appointment Appointment { get; set; }
 
-    }
+	}
 }

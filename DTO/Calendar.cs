@@ -8,12 +8,19 @@ using System.Threading.Tasks;
 
 namespace OOAD_Calendar.DTO
 {
-    public class Calendar
-    {
-        [Key]
-        [ForeignKey("User")]
-        public int UserId { get; set; }
-        public virtual User User { get; set; }
-        public virtual ICollection<Appointment> Appoinments { get; set; }
-    }
+	public class Calendar
+	{
+		[Key]
+		[ForeignKey("User")]
+		public int UserId { get; set; }
+		public virtual User User { get; set; }
+		public virtual ICollection<Appointment> Appointments { get; set; }
+		public virtual ICollection<GroupMeeting> GroupMeetings { get; set; }
+		public Calendar()
+		{
+			Appointments = new HashSet<Appointment>();
+			GroupMeetings = new HashSet<GroupMeeting>();
+		}
+
+	}
 }

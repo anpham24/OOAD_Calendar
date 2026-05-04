@@ -132,6 +132,7 @@
 			// 
 			this.cboReminder.FormattingEnabled = true;
 			this.cboReminder.Items.AddRange(new object[] {
+            "Không nhắc nhở",
             "15 phút",
             "30 phút",
             "45 phút",
