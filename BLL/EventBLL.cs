@@ -94,7 +94,7 @@ namespace OOAD_Calendar.BLL
 				return isOverlapWithInvitedEvents;
 			}
 		}
-		public GroupMeeting FindMatchingGroupMeeting(string name, TimeSpan duration, DateTime start, DateTime end)
+		public GroupMeeting FindMatchingGroupMeeting(string name, DateTime start, DateTime end)
 		{
 			using (var db = new OOAD_Calendar())
 			{

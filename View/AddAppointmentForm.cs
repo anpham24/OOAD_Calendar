@@ -53,8 +53,7 @@ namespace OOAD_Calendar.View
 				return;
 			}
 
-			TimeSpan duration = endTime - startTime;
-			var matchingMeeting = eventBll.FindMatchingGroupMeeting(name, duration, startTime, endTime);
+			var matchingMeeting = eventBll.FindMatchingGroupMeeting(name, startTime, endTime);
 
 			if (matchingMeeting != null)
 			{

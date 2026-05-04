@@ -1,0 +1,47 @@
+﻿HƯỚNG DẪN CÀI ĐẶT VÀ CHẠY DỰ ÁN QUẢN LÝ LỊCH (OOAD_Calendar)
+
+1. Yêu cầu hệ thống (Prerequisites)
+Để chạy được dự án này, máy tính của bạn cần cài đặt sẵn:
+
+- Visual Studio (Khuyến nghị bản 2019 hoặc 2022) có tích hợp workload .NET Desktop Development.
+- Microsoft SQL Server (Bản Express hoặc Developer đều được) để lưu trữ cơ sở dữ liệu.
+
+2. Các bước cài đặt
+
+Bước 1: Mở dự án
+
+- Giải nén file source code.
+- Nháy đúp chuột vào file OOAD_Calendar.sln để mở dự án bằng Visual Studio.
+
+Bước 2: Phục hồi thư viện (Restore NuGet Packages)
+
+- Trong Visual Studio, nhìn sang cửa sổ Solution Explorer (thường ở góc phải).
+- Nhấn chuột phải vào Solution (dòng trên cùng), chọn Restore NuGet Packages để hệ thống tự động tải thư viện Entity Framework về máy.
+
+Bước 3: Cấu hình chuỗi kết nối (Connection String)
+
+- Mở file App.config nằm trong project.
+- Tìm đến thẻ <connectionStrings>.
+- Bạn cần thay đổi phần Data Source= sao cho khớp với tên SQL Server trên máy của bạn (thường là .\SQLEXPRESS, (local) hoặc Tên_Máy_Tính_Của_Bạn).
+
+Ví dụ minh họa:
+        <connectionStrings>
+            <add name="OOAD_Calendar" 
+                 connectionString="Data Source=AN_LAPTOP;Initial Catalog=OOAD_Calendar;Integrated Security=True" 
+                 providerName="System.Data.SqlClient" />
+        </connectionStrings>
+
+Bước 4: Khởi tạo Cơ sở dữ liệu (Database)
+Dự án sử dụng mô hình Entity Framework Code First, do đó bạn không cần chạy script SQL bằng tay. Hệ thống sẽ tự động tạo DB.
+
+- Trên thanh menu của Visual Studio, chọn Tools -> NuGet Package Manager -> Package Manager Console.
+- Tại cửa sổ Console vừa hiện ra ở góc dưới, gõ dòng lệnh sau và nhấn Enter:
+
+        Update-Database
+
+- Đợi thông báo Running Seed method hoàn tất, lúc này Database OOAD_Calendar đã được tạo thành công trong SQL Server của bạn.
+
+Bước 5: Chạy ứng dụng
+
+- Nhấn phím F5 hoặc nút Start màu xanh lá cây trên thanh công cụ để chạy phần mềm.
+- Lưu ý: Vì đây là cơ sở dữ liệu mới hoàn toàn, bạn cần nhấn vào nút "Tạo tài khoản" ở màn hình Login để đăng ký một tài khoản mới trước khi có thể đăng nhập vào hệ thống.
