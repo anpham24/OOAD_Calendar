@@ -1,7 +1,7 @@
 ﻿Thành viên nhóm: 
 1. Phạm Lê Minh An 102240234
 2. Võ Nhật Hoàng Lâm 102240259
-3. Nguyễn Việt Trí 
+3. Nguyễn Việt Trí 102240281
 
 HƯỚNG DẪN CÀI ĐẶT VÀ CHẠY DỰ ÁN QUẢN LÝ LỊCH (OOAD_Calendar)
 
